@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="决策树与随机森林"><meta name="keywords" content="Ensemble Learning,Decision Tree,Random Forest"><meta name="author" content="Wang Han"><meta name="copyright" content="Wang Han"><title>决策树与随机森林 | Wang Han's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树"><span class="toc-number">1.</span> <span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法流程"><span class="toc-number">1.1.</span> <span class="toc-text">算法流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#划分方法"><span class="toc-number">1.2.</span> <span class="toc-text">划分方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ID3方法"><span class="toc-number">1.2.1.</span> <span class="toc-text">ID3方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C4-5方法"><span class="toc-number">1.2.2.</span> <span class="toc-text">C4.5方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基尼方法"><span class="toc-number">1.2.3.</span> <span class="toc-text">基尼方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机森林"><span class="toc-number">2.</span> <span class="toc-text">随机森林</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">Wang Han</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">9</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">20</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">4</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Wang Han's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">决策树与随机森林</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-09-18</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/">Machine Learning</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>简要介绍决策树与随机森林，摘自《机器学习 周志华》。</p>
+<a id="more"></a>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><p><strong>决策树</strong>是一类被广泛应用的机器学习方法。同时可用于分类问题和回归问题。</p>
+<p>决策树的<strong>叶子节点</strong>对应于一个分类结果，其他中间节点对应于一个属性测试。每个节点会根据属性测试的结果将自己所接受到的待测样本集合划分到对应的子节点中。样本全集从根节点开始，最终到达叶子节点分类完成的过程形成了多个判定序列。</p>
+<p>决策树的生成是一个递归的过程。当出现以下情况时，递归到达边界并返回:</p>
+<ol>
+<li>当前节点的样本集合为空</li>
+<li>当前节点的样本集合属于同一类别。</li>
+<li>当前节点的样本集合在所有属性上取值一致，无法划分</li>
+</ol>
+<h3 id="划分方法"><a href="#划分方法" class="headerlink" title="划分方法"></a>划分方法</h3><h4 id="ID3方法"><a href="#ID3方法" class="headerlink" title="ID3方法"></a>ID3方法</h4><p>在节点进行划分时，目的是将样本集合划分为多个<strong>“纯度”</strong>最大化的子集合。一般的，我们用<strong>信息熵</strong>来描述一个样本的纯度。</p>
+<p>假定当前样本集合$D$中第$k$类样本所占比例为$p_{k}(k=1,2,…,|Y|)$，则信息熵的定义为</p>
+<script type="math/tex; mode=display">
+Ent(D)=-\sum_{k=1}^{|Y|}p_{k}log_{2}p_{k}</script><p>$Ent(D)$值越小，则$D$的纯度越高。针对离散属性$a$有$V$个可能取值${a^{1}，a^{2}，…，a^{V}}$，若以$a$为划分属性对样本集合进行划分，则会产生$V$个分支。其中第$v$个分支上包含所有在属性$a$上取值为$v$的样本，记为$D^{v}$。同时考虑到不同分支包含的样本数不同，应当做到样本数越大的分支影响越大，因此对每个节点的信息熵赋权重$|D^{v}|/|D|$。</p>
+<p>从而，可以计算出针对属性$a$对样本集$D$划分前后的<strong>”信息增益“</strong>。</p>
+<script type="math/tex; mode=display">
+Gain(D,a) = End(D) - \sum_{v=1}^{V}\frac{|D^{v}|}{|D|}Ent(D^{v})</script><p>反过来看，信息增益越大。则按$a$划分后样本集信息熵降到最低，纯度最高。那么可以选择<script type="math/tex">a_{*}=\mathop{\arg\max}\limits_{a\in A} Gain(D,a)</script>对集合进行划分，称为<strong>ID3</strong>算法。</p>
+<h4 id="C4-5方法"><a href="#C4-5方法" class="headerlink" title="C4.5方法"></a>C4.5方法</h4><p>根据经验知识，按信息增益考虑对可取值数目较多的属性有所偏好。为减少这种影响，C4.5方法采用<strong>增益率</strong>来代替信息增益对决策树分类属性进行考察。有:</p>
+<script type="math/tex; mode=display">
+Gain\_ratio(D,a)=\frac{Gain(D,a)}{IV(a)}</script><p>其中，</p>
+<script type="math/tex; mode=display">
+IV(a)=-\sum_{v=1}^{V}\frac{|D^{v}|}{|D|}log_{2}\frac{|D^{v}|}{|D|}</script><p>称为$a$的<strong>固有值</strong>，$a$的可取值数目越多，$IV(a)$值越大，对增益值有抵消作用。</p>
+<h4 id="基尼方法"><a href="#基尼方法" class="headerlink" title="基尼方法"></a>基尼方法</h4><p><strong>CART(Classification and Regression Tree)</strong>采用<strong>基尼指数（Gini index)</strong>来选择划分属性。其中:</p>
+<script type="math/tex; mode=display">
+Gini(D)=\sum_{k=1}^{|Y|}\sum_{k^{'}\neq k}p_{k}p_{k^{'}}</script><p>$Gini(D)$反应了从$D$中随机抽取两个样本，其类别不一样的概率，由此表达了<strong>纯度</strong>概念。</p>
+<p>属性$a$的基尼指数为:</p>
+<script type="math/tex; mode=display">
+Gini\_index(D,a)=\sum_{v=1}^{V}\frac{|D^{v}|}{|D|}Gini(D^{v})</script><p>因此在备选属性集合$A$中，选择<script type="math/tex">a_{*}=\mathop{\arg\min}\limits_{a\in A} Gini\_index(D, a)</script>来选择最佳属性。</p>
+<h2 id="随机森林"><a href="#随机森林" class="headerlink" title="随机森林"></a>随机森林</h2><p>随机森林是一种以决策树为基础的Bagging算法，进一步在决策树的训练过程中引入了随机属性选择。</p>
+<p>具体地，传统决策树在选择划分的属性时，是在备选属性集合里选择最优属性。而在随机森林算法中，对基决策树的每个结点，先从该结点的备选属性集合$d$中随机选择一个包含$k$个属性的子集，然后再从该子集中选择最优属性。</p>
+<p>参数$k$控制了随机性的程度，一般情况下推荐$k=log_{2}d$。从某种意义上说，随机森林算法对Bagging学习方法加入了“属性随机扰动”，在一定程度上增强了学习器的泛化能力。</p>
+</div></article><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ensemble-Learning/">Ensemble Learning</a><a class="post-meta__tags" href="/tags/Decision-Tree/">Decision Tree</a><a class="post-meta__tags" href="/tags/Random-Forest/">Random Forest</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/09/20/GradientBoosting和XGBoost简介/"><i class="fa fa-chevron-left">  </i><span>Gradient Boosting和XGBoost简介</span></a></div><div class="next-post pull-right"><a href="/2018/08/04/Pose-Machine-一-MPII的TFRecord数据集制作/"><span>Pose Machine(一):MPII的TFRecord数据集制作</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2019 By Wang Han</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

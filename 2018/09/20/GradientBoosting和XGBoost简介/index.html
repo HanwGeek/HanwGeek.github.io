@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Gradient Boosting和XGBoost简介"><meta name="keywords" content="Ensemble Learning,XGBoost,Gradient Boosting"><meta name="author" content="Wang Han"><meta name="copyright" content="Wang Han"><title>Gradient Boosting和XGBoost简介 | Wang Han's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前向分布算法"><span class="toc-number">1.</span> <span class="toc-text">前向分布算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient-Boost"><span class="toc-number">2.</span> <span class="toc-text">Gradient Boost</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XGBoost"><span class="toc-number">3.</span> <span class="toc-text">XGBoost</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标损失函数"><span class="toc-number">3.1.</span> <span class="toc-text">目标损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#树的定义"><span class="toc-number">3.2.</span> <span class="toc-text">树的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#树的求解和构造"><span class="toc-number">3.3.</span> <span class="toc-text">树的求解和构造</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">Wang Han</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">9</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">20</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">4</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Wang Han's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">Gradient Boosting和XGBoost简介</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-09-20</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Machine-Learning/">Machine Learning</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>介绍Gradient Boosting和XGBoost算法。</p>
+<a id="more"></a>
+<h2 id="前向分布算法"><a href="#前向分布算法" class="headerlink" title="前向分布算法"></a>前向分布算法</h2><p>我们首先来看一下<strong>Boosting</strong>算法。目前来说，常用的Boosting算法模型多为<strong>加法模型(Additice model)</strong>，即:</p>
+<script type="math/tex; mode=display">
+f(x)=\sum_{m=1}^{M}\beta_{m}b(x;\gamma_{m})</script><p>其中，$b(x;\gamma_{m})$为基学习器，$\gamma_{m}$为基学习器参数，$\beta_{m}$为基函数的系数。若干基学习器构成了学习器的加法模型。</p>
+<p>在损失函数$L(y,f(x))$的条件下，学习加法模型$f(x)$称为损失函数最小化问题，即:</p>
+<script type="math/tex; mode=display">
+\min\limits_{\beta_{m},\gamma_{m}}\sum_{i=1}^{N}L(y_{i},\sum_{m=1}^{M}\beta_{m}b(x_{i};\gamma_{m}))</script><p>根据前项分布算法，Boosting总模型在每轮迭代中级联一个新的基学习器，即:</p>
+<script type="math/tex; mode=display">
+f_{m}(x)=f_{m-1}(x)+\beta_{m}b(x;\gamma_{m})</script><p>同时，假定损失函数$L$为平方误差函数，则有:</p>
+<script type="math/tex; mode=display">
+L=(y_{i} - f_{m-1} - \beta_{m}b(x;\gamma_{m}))^2</script><p>其中，令$\gamma=y_{i} - f_{m-1}$，即为我们常说的<strong>残差</strong>。从这个角度来看，前向分布算法即训练一个基学习器和系数权重，使得学习器输出拟合之前学习的结果与实际值的残差，即</p>
+<script type="math/tex; mode=display">
+\min\limits_{\beta_{m},\gamma_{m}}\sum_{i=1}^{N}(\gamma - \beta_{m}b(x;\gamma_{m}))^{2}</script><h2 id="Gradient-Boost"><a href="#Gradient-Boost" class="headerlink" title="Gradient Boost"></a>Gradient Boost</h2><p>梯度提升方法(Gradient Boost)在基本的前向分布算法上进行命题的加强。</p>
+<p>在之前我们所提到的前向分布算法中，假定损失函数为平方误差函数(或指数误差函数)，构造学习器以拟合残差。但实际上，假如我们的优化目标不仅仅是损失函数，一般情况下会加入正则项以限制模型的复杂度。在这种情况下，直接对优化目标进行优化难度较大。</p>
+<p>因此，在构造基学习其拟合残差的主体思想不变的情况下，利用最速下降法的近似方法，以损失函数的负梯度，来代替当前的残差值，即:</p>
+<script type="math/tex; mode=display">
+\gamma =-[\frac{\partial L(y,f(x_{i}))}{\partial f(x_{i})}]_{f(x)=f_{m-1}(x)}</script><p>要使得残差尽可能小，根据梯度下降法可知，需要其沿变量梯度方向下降。因此使得新增的基学习器去拟合损失函数在$f(x)$方向上的负梯度，以达到该目的。</p>
+<p>Gradiet Boosting框架可以结合多种基学习器以在不同问题中达到最优效果。在实际情况下，<strong>梯度提升决策树(GBDT, Gradient Boosting Decision Tree)</strong>应用最为广泛，总体效果也叫好。</p>
+<h2 id="XGBoost"><a href="#XGBoost" class="headerlink" title="XGBoost"></a>XGBoost</h2><p>XGBoost(eXtreme Gradient Boosting)是基于Gradient Boosting的进一步改进。是目前在机器学习竞赛领域应用最多，最为有效的学习方法之一，由<a href="https://homes.cs.washington.edu/~tqchen/" target="_blank" rel="noopener">陈天奇</a>大佬开发。</p>
+<h3 id="目标损失函数"><a href="#目标损失函数" class="headerlink" title="目标损失函数"></a>目标损失函数</h3><p>根据陈天奇博士的Slides，对于决策树或其他一般的学习器，有优化目标函数:</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^{n}l(y_{i}, \hat y_{i}) + \sum_{k}\Omega(f_{k}),\ f_{k} \in \mathcal{F}</script><p>同上采用<strong>Boosting(Additive Training)</strong>方法进行训练:</p>
+<script type="math/tex; mode=display">
+\hat y_{i}^{(t)} = \sum_{k=1}^{t}f_{k}(x_{i}) = \hat y_{i}^{(t-1)} + f_{t}(x_{i})</script><p>那么则在每次Boosting训练过程中，目标损失函数转化为:</p>
+<script type="math/tex; mode=display">
+\begin{align}
+Obj^{(t)} &= \sum_{i=1}^{n}l(y_{i}, \hat y_{i}^{(t)}) + \sum_{i=1}^{t}\Omega(f_{i}) \\ 
+                &= \sum_{i=1}^{n}l(y_{i}, \hat y_{i}^{(t - 1)}+f_{t}(x_{i})) + \Omega(f_{t}) + c
+\end{align}</script><p>其中，$c$为常数。</p>
+<p>类似于<strong>Gradient Boosting</strong>方法，XGBoost在寻找损失函数最小值的过程中，采用了泰勒展开逼近的方法，本质上是将一次梯度展开拓展为二次展开，将$f_{t}(x_{i})$视为增量，有:</p>
+<script type="math/tex; mode=display">
+Obj^(t) = \sum_{i=1}^{n}[l(y_{i}, \hat y_{i}^{(t-1)}) + g_{i}f_{t}(x_{i})+\frac{1}{2}h_{i}f_{t}^{2}(x_{i})]+ \Omega(f_{t}) + c</script><p>其中$g_{i}=\frac{\partial l}{\partial \hat y_{i}^{(t-1)}}$，$h_{i} = \frac{\partial l^{2}}{\partial^{2} \hat y_{i}^{(t-1)}}$。</p>
+<p>将目标函数整理去除常量后得到:</p>
+<script type="math/tex; mode=display">
+Obj^(t) = \sum_{i=1}^{n}[ g_{i}f_{t}(x_{i})+\frac{1}{2}h_{i}f_{t}^{2}(x_{i})]+ \Omega(f_{t})</script><h3 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h3><p>注意到，在目标函数中使用$f_{t}$来描述第$t$棵树，$\Omega(f_{t})$来表征第$t$棵树的复杂度作为正则化罚项。在XGBoost中，第$t$棵数的定义为:</p>
+<script type="math/tex; mode=display">
+f_{t}(x) = w_{q(x)}, w \in R^{T}, q:R^{d} \rightarrow \{ 1,2,\cdots, T\}</script><p>其中，$T$是叶节点数量，$w$是$T$个叶节点权值组成的向量。$q(x)$是决定树结构的映射函数，将得到的叶子结果映射到对应的叶权重上去。</p>
+<p><img src="/2018/09/20/GradientBoosting和XGBoost简介/treestruct.png" alt="treestruct"></p>
+<p>因此，树复杂度的定义为叶子节点数量与权值2-范数的和，即:</p>
+<script type="math/tex; mode=display">
+\Omega(f_{t}) = \gamma T + \frac{1}{2} \lambda\sum_{j=1}^{T}\omega_{j}^{2}</script><p>将复杂度带入目标损失函数，得到:</p>
+<script type="math/tex; mode=display">
+\begin{align}
+Obj^{(t)} &= \sum_{i=1}^{n}[ g_{i}f_{t}(x_{i})+\frac{1}{2}h_{i}f_{t}^{2}(x_{i})]+ \gamma T + \frac{1}{2} \lambda\sum_{j=1}^{T}\omega_{j}^{2} \\
+              &=\sum_{j=1}^{T}[(\sum_{i \in I_{j}}g_{i})w_{j} + \frac{1}{2}(\sum_{i \in I_{j}}h_{i}+\lambda)w_{j}^{2}] + \gamma T
+\end{align}</script><p>其中$I_{j} = \{i|q(x_{i}） = j\}$，即映射到$j$权值上的叶子集合$i$。</p>
+<h3 id="树的求解和构造"><a href="#树的求解和构造" class="headerlink" title="树的求解和构造"></a>树的求解和构造</h3><p>由上述可知，我们已经得到了确定的目标函数，是关于$w$的二次函数。显然地，我们可以得到:</p>
+<script type="math/tex; mode=display">
+w_{j}^{*} = argmin(Obj^{(t)}_{j}) = -\frac{G_{j}}{H_{j} + \lambda}</script><script type="math/tex; mode=display">
+Obj^{(t)} = -\frac{1}{2}\sum_{j=1}^{T} \frac{G_{j}^{2}}{H_{j} + \lambda} + \gamma T</script><p>其中，$G_{j} = \sum_{i \in I_{j}}g_{i}$，$H_{j} = \sum_{i \in I_{j}}h_{i}$。</p>
+<p>由于我们的目标是最小化损失函数，然而树的结构的可能情况太多，不能够一一构建并遍历一计算损失函数的最小值。</p>
+<p>因此采用<strong>贪心方法</strong>，将树的叶节点逐步分裂。在叶节点分裂时，需要确定该处分裂是否可以使得损失函数进一步变小。采用以下算法：</p>
+<ul>
+<li><p>从深度为0的空树开始</p>
+</li>
+<li><p>对于每个叶节点，枚举所有特征</p>
+</li>
+<li>对于每个特征，将训练样本按该特征值进行排序</li>
+<li>从左到右遍历分割点位置，计算$Gain$值以确定最佳分割点</li>
+</ul>
+<p>其中，衡量一个分割点性能的度量是$Gain$值，即</p>
+<script type="math/tex; mode=display">
+Gain = \frac{G_{L}^{2}}{H_{L}+\lambda} + \frac{G_{R}^{2}}{H_{R}+\lambda} - \frac{(G_{L} + G_{R})^{2}}{H_{L} + H_{R}+\lambda} - \gamma</script><p>该式的意义是若按该处进行分割后，损失函数的下降量，即左子树右子树损失值和减去分割前损失函数和以及增加叶节点分割带来的树复杂度罚项(+1)。</p>
+<p>值得注意的是构建单独一棵树的时间复杂度为$O(ndKlogn)$，其中$d$为特征树，$K$为树层数，$nlogn$为排序时间复杂度。同时在编程实现时可以采用更底层的存储优化或并行优化方法。因而，XGBoost方法可以应用在大型数据集上，实现了其论文题中的<strong>A Scalable Tree Boosting System</strong>。</p>
+</div></article><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ensemble-Learning/">Ensemble Learning</a><a class="post-meta__tags" href="/tags/XGBoost/">XGBoost</a><a class="post-meta__tags" href="/tags/Gradient-Boosting/">Gradient Boosting</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/10/15/R-CNN族网络简介/"><i class="fa fa-chevron-left">  </i><span>R-CNN族网络简介</span></a></div><div class="next-post pull-right"><a href="/2018/09/18/决策树与随机森林/"><span>决策树与随机森林</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2019 By Wang Han</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>

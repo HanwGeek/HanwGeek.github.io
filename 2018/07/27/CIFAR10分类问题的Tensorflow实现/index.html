@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="CIFAR10分类问题的Tensorflow实现"><meta name="keywords" content="AlexNet,Tensorflow,CIFAR-10"><meta name="author" content="Wang Han"><meta name="copyright" content="Wang Han"><title>CIFAR10分类问题的Tensorflow实现 | Wang Han's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境配置"><span class="toc-number">1.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据集"><span class="toc-number">2.</span> <span class="toc-text">数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AlexNet"><span class="toc-number">3.</span> <span class="toc-text">AlexNet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CIFAR-10模型"><span class="toc-number">4.</span> <span class="toc-text">CIFAR-10模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#源码"><span class="toc-number">4.1.</span> <span class="toc-text">源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入"><span class="toc-number">4.2.</span> <span class="toc-text">输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预测"><span class="toc-number">4.3.</span> <span class="toc-text">预测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#局部响应归一化"><span class="toc-number">4.3.1.</span> <span class="toc-text">局部响应归一化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修正线性激活"><span class="toc-number">4.3.2.</span> <span class="toc-text">修正线性激活</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#权重衰减"><span class="toc-number">4.3.3.</span> <span class="toc-text">权重衰减</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#滑动平均"><span class="toc-number">4.3.4.</span> <span class="toc-text">滑动平均</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#训练"><span class="toc-number">4.4.</span> <span class="toc-text">训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#评估"><span class="toc-number">4.5.</span> <span class="toc-text">评估</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">Wang Han</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">9</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">20</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">4</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Wang Han's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus"><a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span></div><div id="post-info"><div id="post-title">CIFAR10分类问题的Tensorflow实现</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-27</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Deep-Learning/">Deep Learning</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>参考<a href="http://www.tensorfly.cn/tfdoc/tutorials/deep_cnn.html" target="_blank" rel="noopener">TensorFlow中文社区</a>，采用<strong>AlexNet</strong>与<strong>CIFAR10</strong>数据集解决简单图像分类问题。</p>
+<a id="more"></a>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>Ubuntu16.04 + Python3.5 + Tensorflow1.9.0(CPU版本)</p>
+<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>本次实验所采用的数据集是由<strong>Alex Krizhevsky</strong>， <strong>Vinod Nair</strong>和<strong>Geoffrey Hinton</strong>收集整理的<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="noopener">CIFAR-10</a>数据集的二进制版本。该数据集共有<strong>60000</strong>张大小为<strong>32 * 32</strong>图片，分为<strong>10</strong>类。</p>
+<p><img src="/2018/07/27/CIFAR10分类问题的Tensorflow实现/cifar10.png" alt="CIFAR10类别"></p>
+<p>在<a href="http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz" target="_blank" rel="noopener">二进制版本</a>的数据集中，数据以及标签均以<code>[label, image]</code>的方式排列。其中<strong>label</strong>占<strong>1</strong>个字节，<strong>image</strong>占<strong>32 * 32</strong>字节。</p>
+<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p><strong>AlexNet</strong>是<strong>2012-ImageNet</strong>图像分类比赛的冠军，由<strong>Hinton</strong>和他的学生<strong>Alex Krizhevsky</strong>设计而成。</p>
+<p>相关论文:<a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">ImageNet Classification with Deep Convolutional Neural Networks</a></p>
+<p><img src="/2018/07/27/CIFAR10分类问题的Tensorflow实现/AlexNetModel.png" alt="AlexNet模型"></p>
+<p><strong>AlexNet</strong>共有5个卷积层和3个全连接层。其中，前2个卷积层的输出均经过池化和局部响应归一化。</p>
+<h2 id="CIFAR-10模型"><a href="#CIFAR-10模型" class="headerlink" title="CIFAR-10模型"></a>CIFAR-10模型</h2><p>本次实验所采用的<strong>CIFAR-10</strong>模型与<strong>AlexNet</strong>网络结构基本一致。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>先放出<a href="https://github.com/HanwGeek/HanwGeek.github.io/tree/master/2018/07/27/CIFAR10%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%9A%84Tensorflow%E5%AE%9E%E7%8E%B0/cifar10_alexnet" target="_blank" rel="noopener">源码</a></p>
+<h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3><p>数据集的输入主要依靠调用<code>data_input.py</code>中的<code>inputs()</code>或<code>distorted_inputs()</code>函数来完成。在这两个函数中，通过预先定义标签和图片的大小，调用<code>tf.FixedLengthRecordReader()</code>函数来读取图片和标签数据块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">result.height = <span class="number">32</span></span><br><span class="line">result.width = <span class="number">32</span></span><br><span class="line">result.depth = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">lable_bytes = <span class="number">1</span></span><br><span class="line">image_bytes = result.height * result.width * result.depth</span><br><span class="line">record_bytes = lable_bytes + image_bytes</span><br><span class="line"></span><br><span class="line">reader = tf.FixedLengthRecordReader(record_bytes=record_bytes)</span><br></pre></td></tr></table></figure>
+<p>将读取得到的一个数据块，按标签和图片数据的顺序和大小进行切分。</p>
+<p>特别地，图片数据需要从一段数据序列，先转换成通道优先的三维矩阵，再转化为<code>[height, depth, width]</code>方式排列的图像矩阵数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Label</span></span><br><span class="line">result.label = tf.cast(tf.strided_slice(record_bytes, [<span class="number">0</span>], [lable_bytes]), tf.int32)</span><br><span class="line"><span class="comment"># Image</span></span><br><span class="line">depth_major = tf.reshape(tf.strided_slice(record_bytes, [lable_bytes], </span><br><span class="line">		[lable_bytes + image_bytes]), [result.depth, result.height, result.width])</span><br><span class="line">result.uint8image = tf.transpose(depth_major, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>在<code>inputs()</code>函数中，将图片以原中心为中心，裁剪为<strong>24 * 24</strong>大小的新图片。</p>
+<p>在<code>distorted_inputs()</code>函数中，将图片按随机中心裁剪为<strong>24 * 24</strong>大小后，再进行随机地<strong>水平翻转</strong>,调整其<strong>亮度</strong>和<strong>对比度</strong>。</p>
+<h3 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h3><p>神经网络模型由<code>model.py</code>中的<code>inference()</code>构造得出。</p>
+<p>模型网络层结构如下表所示:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Layer</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">conv1</td>
+<td style="text-align:center">卷积 和 ReLu激活</td>
+</tr>
+<tr>
+<td style="text-align:center">pool1</td>
+<td style="text-align:center">max pooling</td>
+</tr>
+<tr>
+<td style="text-align:center">norm1</td>
+<td style="text-align:center">局部响应归一化</td>
+</tr>
+<tr>
+<td style="text-align:center">conv2</td>
+<td style="text-align:center">卷积 和 ReLu激活</td>
+</tr>
+<tr>
+<td style="text-align:center">norm2</td>
+<td style="text-align:center">局部响应归一化</td>
+</tr>
+<tr>
+<td style="text-align:center">pool2</td>
+<td style="text-align:center">max pooling</td>
+</tr>
+<tr>
+<td style="text-align:center">local3</td>
+<td style="text-align:center">基于修正线性激活的全连接层</td>
+</tr>
+<tr>
+<td style="text-align:center">local4</td>
+<td style="text-align:center">基于修正线性激活的全连接层</td>
+</tr>
+<tr>
+<td style="text-align:center">softmax_linear</td>
+<td style="text-align:center">线性变换输出logits</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="局部响应归一化"><a href="#局部响应归一化" class="headerlink" title="局部响应归一化"></a>局部响应归一化</h4><p><strong>侧向抑制(Lateral inhibition)</strong>是神经生物学中的一个概念，指的是被激活的神经元会抑制其相邻的神经元。</p>
+<p><strong>局部响应归一化(Local Response Normalization, LRN)</strong>就是受侧抑制原理的启发，将局部较活跃，响应较大的神经元的值进一步增强，同时抑制其他反馈较小的神经元，从而最终增强<strong>泛化能力</strong>。在具体实现中采用<code>tf.nn.lrn()</code>函数。</p>
+<p><strong>局部响应归一化</strong>公式如下:</p>
+<script type="math/tex; mode=display">
+b^{i}_{x,y} = a^{i}_{x, y} / \left(k + \alpha \sum^{min(N-1, i+n/2)}_{j=max(0, i-n/2)}(a^{j}_{x,y})^{2} \right)^{\beta}</script><p>其中</p>
+<ul>
+<li>$a^{j}_{x, y}$表示第$i$个<strong>卷积核(Kernel)</strong>在图像$(x, y)$处经由<strong>卷积</strong>和<strong>ReLu</strong>激活后的输出值</li>
+<li>$n$表示邻近第$i$个卷积核的$n$个<strong>卷积核</strong></li>
+<li>$k, \alpha, \beta$均为<strong>超参数(Hpyer-parameter)</strong>，均由人为设定</li>
+</ul>
+<h4 id="修正线性激活"><a href="#修正线性激活" class="headerlink" title="修正线性激活"></a>修正线性激活</h4><p>采用<strong>修正线性函数(Rectified Linear Units, ReLu)</strong>作为全连接层的<strong>激活函数</strong>。</p>
+<p>具体实现中采用<code>tf.nn.relu()</code>函数。</p>
+<script type="math/tex; mode=display">
+ReLu(x) = \begin{cases}x\ \ \  if\ x\ge0 \\ 0\ \ \ if\ x \le0 \end{cases}</script><p><strong>ReLu</strong>函数的优点:</p>
+<ol>
+<li>相比<strong>sigmoid</strong>和<strong>tanh</strong>函数，能够快速收敛。</li>
+<li>有效缓解<strong>梯度消失(Gradient Vanish)</strong>问题。</li>
+</ol>
+<p><strong>ReLu</strong>函数的缺点:</p>
+<ol>
+<li>可能发生神经元死亡，<strong>权重无法更新</strong>的情况。从这一刻开始，梯度永远为0且不可逆。</li>
+</ol>
+<h4 id="权重衰减"><a href="#权重衰减" class="headerlink" title="权重衰减"></a>权重衰减</h4><p><strong>权重衰减(Weight Decay)</strong>是在误差计算中加入参数的<strong>2-范数</strong>来避免训练时<strong>过拟合</strong>现象的一种方法。</p>
+<script type="math/tex; mode=display">
+C = C_{0} + \frac{\lambda}{2}||w||^{2}</script><p>$\lambda$即为权重衰减因子，，起到惩罚过拟合的作用。在梯度下降算法的过程中，有:</p>
+<script type="math/tex; mode=display">
+\frac{\partial C}{\partial w} = \frac{\partial C_{0}}{\partial w} + \lambda w</script><script type="math/tex; mode=display">
+w \rightarrow (1 - \eta \lambda)w - \eta\frac{\partial C_{0}}{\partial w}</script><p>注意到，权重衰减因子并不影响梯度下降的方向，但会使得权重不断衰减变小。更小的权重值，能够使得函数在拟合时抖动变小。通过图片直观来看，较大的权重值，很有可能异味着函数学习在向着过拟合的方向发展。根据奥卡姆剃刀原则，平滑的函数泛化能力更强。</p>
+<p><img src="/2018/07/27/CIFAR10分类问题的Tensorflow实现/overfitting.png" alt="过拟合现象"></p>
+<h4 id="滑动平均"><a href="#滑动平均" class="headerlink" title="滑动平均"></a>滑动平均</h4><p><strong>滑动平均(Moving Average)</strong>是一种特殊的均值计算方法，其计算方式类似于图像处理中的<strong>均值滤波</strong>。在一个数据序列中，按次序求一个定长子集的平均值。具体实现中采用指数衰减的滑动平均<code>tf.train.ExponentialMovingAverage()</code>。其中，需要设定一个衰减率(decay)。为保证模型的稳定性，一般取趋近于1的数，如0.99。均值计算方法如下所示:</p>
+<script type="math/tex; mode=display">
+m_{1} = a_{1}</script><script type="math/tex; mode=display">
+m_{n} = decay * m_{n-1} + (1-decay) * a_{n}</script><h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><p>训练由<code>train.py</code>完成。</p>
+<h3 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h3><p>评估由<code>eval.py</code>完成</p>
+</div></article><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AlexNet/">AlexNet</a><a class="post-meta__tags" href="/tags/Tensorflow/">Tensorflow</a><a class="post-meta__tags" href="/tags/CIFAR-10/">CIFAR-10</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2018/07/28/基于MPICH的并行KMeans算法实现/"><i class="fa fa-chevron-left">  </i><span>基于MPICH的并行KMeans算法实现</span></a></div><div class="next-post pull-right"><a href="/2018/07/20/Tensorflow下简单CNN的构造与训练/"><span>Tensorflow下简单CNN的构造与训练</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2019 By Wang Han</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.6.1"></script><script src="/js/fancybox.js?version=1.6.1"></script><script src="/js/sidebar.js?version=1.6.1"></script><script src="/js/copy.js?version=1.6.1"></script><script src="/js/fireworks.js?version=1.6.1"></script><script src="/js/transition.js?version=1.6.1"></script><script src="/js/scroll.js?version=1.6.1"></script><script src="/js/head.js?version=1.6.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+}</script></body></html>
