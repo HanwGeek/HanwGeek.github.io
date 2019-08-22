@@ -1,4 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="VSCode算法刷题编译&amp;Debug环境配置方法"><meta name="keywords" content="VSCode,Algorithm"><meta name="author" content="Wang Han"><meta name="copyright" content="Wang Han"><title>VSCode算法刷题编译&amp;Debug环境配置方法 | Wang Han's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><script>var GLOBAL_CONFIG = { 
+<!DOCTYPE html><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="VSCode算法刷题编译&amp;Debug环境配置方法"><meta name="keywords" content="VSCode,Algorithm"><meta name="author" content="Wang Han"><meta name="copyright" content="Wang Han"><title>VSCode算法刷题编译&amp;Debug环境配置方法 | Wang Han's Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.6.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.6.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.6.1"><link rel="dns-prefetch" href="https://cdn.staticfile.org"><link rel="dns-prefetch" href="https://cdn.bootcss.com"><link rel="dns-prefetch" href="https://creativecommons.org"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-146242880-1', 'auto');
+ga('send', 'pageview');</script><script>var GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: undefined,
@@ -11,7 +17,7 @@
 <a id="more"></a>
 <p>笔者放弃使用Visual Studio已一年有余。尤其是在Surface Pro这种轻量级环境中更不适合使用这种庞然巨兽。我的所有日常开发活动基本全部转移到VSCode中。在这里要说一句微软永远是我大哥!</p>
 <p>言归正传，出于自身爱好以及升学&amp;找工作压力。笔者作为一个算法菜鸡，不得不开始刷题之旅。由于之前我对于VSCode配置刷题需求没有找到完整的资料，在经过查找部分资料和自己的尝试后，将配置方法记录如下以作备忘。</p>
-<h2 id="1-文件组织结构"><a href="#1-文件组织结构" class="headerlink" title="1. 文件组织结构"></a>1. 文件组织结构</h2><p><img src="/2019/08/22/VSCode算法刷题编译&Debug环境配置方法/VSCode算法刷题编译-Debug环境配置方法/files.jpg" alt="文件组织结构"></p>
+<h2 id="1-文件组织结构"><a href="#1-文件组织结构" class="headerlink" title="1. 文件组织结构"></a>1. 文件组织结构</h2><p><img src="https://pic2.zhimg.com/80/v2-4cae060e06cd73d19cfb8bf1f318c6d9_hd.jpg" alt="文件组织结构"></p>
 <p>我的刷题文件夹环境如图所示。</p>
 <ul>
 <li>不同题库使用不同的文件夹单独存放，并采用Git作为版本管理。</li>
