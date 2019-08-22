@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanwgeek.github.io/"/>
-  <updated>2019-04-12T15:33:04.525Z</updated>
+  <updated>2019-08-22T03:47:25.226Z</updated>
   <id>https://hanwgeek.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>VSCode算法刷题编译&amp;Debug环境配置方法</title>
+    <link href="https://hanwgeek.github.io/2019/08/22/VSCode%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%BC%96%E8%AF%91&amp;Debug%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95/"/>
+    <id>https://hanwgeek.github.io/2019/08/22/VSCode算法刷题编译&amp;Debug环境配置方法/</id>
+    <published>2019-08-22T03:37:23.000Z</published>
+    <updated>2019-08-22T03:47:25.226Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文更新于2019.6。VSCode版本1.35.1。迁移自知乎.</p><a id="more"></a><p>笔者放弃使用Visual Studio已一年有余。尤其是在Surface Pro这种轻量级环境中更不适合使用这种庞然巨兽。我的所有日常开发活动基本全部转移到VSCode中。在这里要说一句微软永远是我大哥!</p><p>言归正传，出于自身爱好以及升学&amp;找工作压力。笔者作为一个算法菜鸡，不得不开始刷题之旅。由于之前我对于VSCode配置刷题需求没有找到完整的资料，在经过查找部分资料和自己的尝试后，将配置方法记录如下以作备忘。</p><h2 id="1-文件组织结构"><a href="#1-文件组织结构" class="headerlink" title="1. 文件组织结构"></a>1. 文件组织结构</h2><p><img src="/2019/08/22/VSCode算法刷题编译&Debug环境配置方法/VSCode算法刷题编译-Debug环境配置方法/files.jpg" alt="文件组织结构"></p><p>我的刷题文件夹环境如图所示。</p><ul><li>不同题库使用不同的文件夹单独存放，并采用Git作为版本管理。</li><li>build/文件夹下存放编译的程序方便调试，并在.gitignore中屏蔽。</li><li>f.in文件用于存储样例测试</li><li>temp.h中存放一些模板(虽然菜用不到)</li></ul><h2 id="2-编译环境"><a href="#2-编译环境" class="headerlink" title="2. 编译环境"></a>2. 编译环境</h2><p>编译环境我推荐使用Code Runner插件，该插件对单文件编译非常友好。<img src="https://pic1.zhimg.com/80/v2-8a1ef582b1c34bf4744e6f8af5cfe9ec_hd.jpg" alt="Code Runner插件"></p><p>编译器当然不用说，就是gcc/g++，我之前配置好的是Mingw-w64版本的。</p><p>以下的设置除了<code>executorMap</code>之外，可以通过设置界面根据个人喜好勾选。但<code>executorMap</code>设置需要单独写入<code>setting.json</code>文件中。该项定义了编译和运行相关程序的命令。code runner会将源码文件编译为同名exe文件并自动执行，结果打印到内嵌的终端中。</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"code-runner.runInTerminal"</span>: <span class="literal">true</span>, </span><br><span class="line">    <span class="attr">"code-runner.saveFileBeforeRun"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"code-runner.clearPreviousOutput"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"code-runner.fileDirectoryAsCwd"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"code-runner.executorMap"</span>: &#123;</span><br><span class="line">        <span class="attr">"c"</span>: <span class="string">"cd $dir &amp;&amp; gcc $fileName -g -o ../build/$fileNameWithoutExt &amp;&amp; cd ../build/ &amp;&amp; $fileNameWithoutExt"</span>,</span><br><span class="line">        <span class="attr">"cpp"</span>: <span class="string">"cd $dir &amp;&amp; g++ $fileName -g -o ../build/$fileNameWithoutExt &amp;&amp; cd ../build/ &amp;&amp; $fileNameWithoutExt"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"code-runner.ignoreSelection"</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="3-Debug环境"><a href="#3-Debug环境" class="headerlink" title="3. Debug环境"></a>3. Debug环境</h2><p>debugger也是采用的Mingw-w64中的gdb。需要在<code>launch.json</code>的<code>configure</code>中加入如下配置项。</p><p>其中<code>program</code>指向需要debug的程序，<code>miDebuggerPath</code>需要指向gdb程序的绝对路径。</p><p>值得注意的是，<code>cwd</code>项是程序运行路径，在这里我指向的是build文件夹。之前设置的直接就是<code>${workspaceFolder}</code>。导致我无法从程序中读取测试文件。</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"GDB"</span>,</span><br><span class="line">  <span class="attr">"type"</span>: <span class="string">"cppdbg"</span>,</span><br><span class="line">  <span class="attr">"request"</span>: <span class="string">"launch"</span>,</span><br><span class="line">  <span class="attr">"program"</span>: <span class="string">"$&#123;workspaceFolder&#125;/build/$&#123;fileBasenameNoExtension&#125;"</span>,</span><br><span class="line">  <span class="attr">"args"</span>: [],</span><br><span class="line">  <span class="attr">"stopAtEntry"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">"cwd"</span>: <span class="string">"$&#123;workspaceFolder&#125;/build"</span>,</span><br><span class="line">  <span class="attr">"environment"</span>: [],</span><br><span class="line">  <span class="attr">"externalConsole"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"MIMode"</span>: <span class="string">"gdb"</span>,</span><br><span class="line">  <span class="attr">"miDebuggerPath"</span>: <span class="string">"C:/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/gdb.exe"</span>,</span><br><span class="line">  <span class="attr">"setupCommands"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"description"</span>: <span class="string">"Enable pretty-printing for gdb"</span>,</span><br><span class="line">      <span class="attr">"text"</span>: <span class="string">"-enable-pretty-printing"</span>,</span><br><span class="line">      <span class="attr">"ignoreFailures"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="4-愉快的使用"><a href="#4-愉快的使用" class="headerlink" title="4.愉快的使用"></a>4.愉快的使用</h2><p>写好一个题目的代码后，点击右上角的三角进行编译和运行，在下方的终端里就直接能出现结果。</p><p><img src="https://pic4.zhimg.com/80/v2-1f715be75cc152fc6250dfe739561cdb_hd.jpg" alt="编译样例"></p><p>点击侧边栏GDB按钮，在打上断点后在弹出栏中点击绿色三角，就能愉快地debug了(并不)。感觉比VS还好用!</p><p><img src="https://pic4.zhimg.com/80/v2-e29b9897e44cd0eb6d7ea91ab7bba647_hd.jpg" alt="Debug样例"></p><p>最后说一句微软NP!</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文更新于2019.6。VSCode版本1.35.1。迁移自知乎.&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="VSCode" scheme="https://hanwgeek.github.io/tags/VSCode/"/>
+    
+      <category term="Algorithm" scheme="https://hanwgeek.github.io/tags/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title>基于RNN的文本概率预测</title>
