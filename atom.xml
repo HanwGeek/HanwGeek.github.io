@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Wang Han&#39;s Blog</title>
   
-  
+  <subtitle>Code tells me everything.</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanwgeek.github.io/"/>
