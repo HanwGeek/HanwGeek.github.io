@@ -16,23 +16,72 @@
 
   <title>Han Wang</title>
   <script src="https://kit.fontawesome.com/c056228a15.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <style>
+    /* General styling */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-
-      font-family: "Gill Sans", "Gill Sans MT", Calibri, 'Lato', sans-serif;
+      font-family: 'Klee One', sans-serif;
     }
 
+    /* Body layout */
+    body {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      align-items: flex-start;
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+      width: 25%;
+      height: 100%;
+      padding: 2em;
+      overflow-y: auto;
+      background-color: #f7f7f7;
+      flex-shrink: 0;
+    }
+
+    /* Main content styling */
+    .main-content {
+      width: 75%;
+      padding: 2em;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    /* Header styling */
     header {
-      margin-top: 5em;
       text-align: center;
     }
 
+    /* Links styling */
     header a {
       color: #333;
+      text-decoration: none;
+    }
+
+    /* Headings and paragraph styling */
+    h2, h3, ul, p {
+      margin-bottom: 0.5em;
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-weight: 400;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      font-weight: 400;
+      font-size: 1.3rem;
+    }
+
+    h2 a, h3 a {
+      color: #000;
       text-decoration: none;
     }
 
@@ -49,82 +98,63 @@
       text-decoration: none;
     }
 
-    h2,
-    h3 {
-      margin-top: 1em;
-    }
-
-    h2,
-    h3,
-    ul,
-    p {
-      margin-bottom: 0.5em;
-      line-height: 1.5;
-    }
-
-    h2 {
-      font-weight: 300;
-      font-size: 1.5rem;
-/*      font-style: italic;*/
-    }
-
-    h3 {
-      font-weight: 300;
-      font-size: 1.3rem;
-    }
-
-    h2 a,
-    h3 a {
-      color: #000;
-      text-decoration: none;
-    }
-
     ul ul {
       margin-left: 20px; 
     }
-    
-    .education li {
-      margin-bottom: 1em
+
+    .education li, .publication li, .presentation li {
+      margin-bottom: 1em;
     }
 
-    .publication li {
-      margin-bottom: 1em
+    /* Justified text styling */
+    .justified-text {
+      text-align: justify;
     }
 
-    .presentation li {
-      margin-bottom: 1em
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
 
-    .content {
-      padding: 1em 3em;
-      max-width: 51em;
-      margin: 0 auto;
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888; 
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555; 
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>Han Wang</h1>
-    <p><em>hanwgeek AT connect.hku.hk | hanwgeek AT gmail.com</em></p>
-    <p>
-      <a href="https://twitter.com/HanwGeek"><i class="fa-brands fa-square-twitter fa-2x"></i></a>
-      <a href="https://github.com/HanwGeek"><i class="fa-brands fa-square-github fa-2x"></i></a>
-      <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ"><i class="ai ai-google-scholar-square ai-2x"></i></a>
-      <a href="https://www.researchgate.net/profile/Han-Wang-137"><i class="ai ai-researchgate-square fa-2x"></i></a>
-      <a href="https://www.linkedin.com/in/hanwgeek/"><i class="fa-brands fa-linkedin fa-2x"></i></a>
-    </p>
-  </header>
-  
-
-  <div class='content'>
-
+  <div class="sidebar">
+    <header>
+      <h1>Han Wang</h1>
+      <!-- <p><em>hanwgeek AT connect.hku.hk</em></p> -->
+      <p><em>hanwgeek AT gmail.com</em></p>
+      <p>
+        <a href="https://twitter.com/HanwGeek"><i class="fa-brands fa-square-twitter fa-2x"></i></a>
+        <a href="https://github.com/HanwGeek"><i class="fa-brands fa-square-github fa-2x"></i></a>
+        <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ"><i class="ai ai-google-scholar-square ai-2x"></i></a>
+        <a href="https://www.researchgate.net/profile/Han-Wang-137"><i class="ai ai-researchgate-square fa-2x"></i></a>
+        <a href="https://www.linkedin.com/in/hanwgeek/"><i class="fa-brands fa-linkedin fa-2x"></i></a>
+      </p>
+    </header>
+    
+    <br>
     <h2>About me</h2>
-    <p>
+    <p class="justified-text">
     Hi, I'm a PhD student@<a href="https://fuselab.hku.hk/">FUSELab</a> at the University of Hong Kong. Previously I got my M.Sc. degree from Peking University in 2023 and my B.Eng. degree from Wuhan University in 2020. I was also a software developer intern at ESRI in 2020. Feel free to contact me!
     </p>
+  </div>
 
-    <div class='appointment'>
+  <div class="main-content">
+    <div>
     <h2><u>Appointment</u></h2>
     <ul>
       <li>
@@ -297,10 +327,6 @@
     </ul> 
     </div>
 
-    <!-- Experience -->
-    <!-- <h2>Experience</h2> -->
-
-    <!-- Awards -->
     <h2><u>Selected Awards</u></h2>
     <ul>
       <li>Excellent Graduate of Beijing
