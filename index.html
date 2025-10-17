@@ -27,83 +27,196 @@
       font-family: 'Klee One', sans-serif;
     }
 
-    /* Body layout */
+    /* Body layout - centered column style */
     body {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      align-items: flex-start;
+      background-color: #ffffff;
+      min-height: 100vh;
+      padding: 20px;
     }
 
-    /* Sidebar styling */
-    .sidebar {
-      width: 25%;
-      height: 100%;
-      padding: 2em;
-      overflow-y: auto;
-      background-color: #f7f7f7;
-      flex-shrink: 0;
+    /* Container - centered column, minimal style */
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: none;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
     }
 
-    /* Main content styling */
-    .main-content {
-      width: 75%;
-      padding: 2em;
-      overflow-y: auto;
-      height: 100%;
-    }
-
-    /* Header styling */
-    header {
+    /* Profile header section */
+    .profile-header {
+      padding: 32px 0 16px 0;
+      background: none;
+      border-bottom: none;
       text-align: center;
     }
 
+    .profile-header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #24292f;
+    }
+
+    .profile-header .email {
+      color: #656d76;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .profile-header .social-links {
+      margin-bottom: 20px;
+    }
+
+    .profile-header .social-links a {
+      color: #656d76;
+      margin: 0 8px;
+      transition: color 0.2s;
+    }
+
+    .profile-header .social-links a:hover {
+      color: #0969da;
+    }
+
+    /* About section */
+    .about-section {
+      padding: 16px 0;
+      border-bottom: none;
+    }
+
+    .about-section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #24292f;
+      margin-bottom: 12px;
+    }
+
+    .about-section p {
+      color: #24292f;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    /* Main content section */
+    .content-section {
+      padding: 16px 0;
+      border-bottom: none;
+    }
+
+    .content-section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #24292f;
+      margin-bottom: 16px;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .content-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #24292f;
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
     /* Links styling */
-    header a {
-      color: #333;
-      text-decoration: none;
-    }
-
-    /* Headings and paragraph styling */
-    h2, h3, ul, p {
-      margin-bottom: 0.5em;
-      line-height: 1.5;
-    }
-
-    h2 {
-      font-weight: 400;
-      font-size: 1.5rem;
-    }
-
-    h3 {
-      font-weight: 400;
-      font-size: 1.3rem;
-    }
-
-    h2 a, h3 a {
-      color: #000;
-      text-decoration: none;
-    }
-
     a {
-      color: #0679A7;
+      color: #0969da;
       text-decoration: none;
     }
 
-    a:link {
-      text-decoration: none;
+    a:hover {
+      text-decoration: underline;
     }
 
-    a:visited {
-      text-decoration: none;
+    /* List styling */
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .content-section > div > ul > li {
+      padding: 12px 0;
+      border-bottom: none;
     }
 
     ul ul {
-      margin-left: 20px; 
+      margin-left: 20px;
+      margin-top: 8px;
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    ul ul li {
+      padding: 4px 0;
+      border-bottom: none !important;
     }
 
     .education li, .publication li, .presentation li {
-      margin-bottom: 1em;
+      margin-bottom: 16px;
+    }
+
+    /* Awards section - spacing between award items */
+    .content-section ul li {
+      margin-bottom: 20px;
+    }
+
+
+
+    /* Publication item with graphical abstract */
+    .publication-item {
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+
+    .publication-content {
+      flex: 1;
+    }
+
+    .graphical-abstract {
+      width: 200px;
+      height: 150px;
+      flex-shrink: 0;
+      border: none;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      color: #656d76;
+      font-size: 14px;
+      text-align: center;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    .graphical-abstract:hover {
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    .graphical-abstract img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    /* Date float right styling */
+    div[style*="float: right"] {
+      color: #656d76;
+      font-size: 14px;
+    }
+
+    /* Bold text styling */
+    b {
+      font-weight: 600;
+      color: #24292f;
     }
 
     /* Justified text styling */
@@ -111,88 +224,104 @@
       text-align: justify;
     }
 
+    /* Mobile responsive design */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+      }
+
+      .container {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        margin: 0 auto;
+      }
+
+      .profile-header,
+      .about-section,
+      .content-section {
+        padding: 12px 0;
+      }
+
+      .publication-item {
+        flex-direction: column;
+      }
+
+      .graphical-abstract {
+        width: 100%;
+        height: 180px;
+      }
+    }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 10px;
     }
 
     ::-webkit-scrollbar-track {
-      background: #f1f1f1; 
+      background: #f6f8fa;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #888; 
-      border-radius: 10px;
+      background: #d0d7de;
+      border-radius: 5px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #555; 
+      background: #afb8c1;
     }
   </style>
 </head>
 
 <body>
-  <div class="sidebar">
-    <header>
-      <h1>Han Wang</h1>
-      <!-- <p><em>hanwgeek AT connect.hku.hk</em></p> -->
-      <p><em>hanwgeek AT gmail.com</em></p>
-      <p>
-        <a href="https://twitter.com/HanwGeek"><i class="fa-brands fa-square-twitter fa-2x"></i></a>
-        <a href="https://github.com/HanwGeek"><i class="fa-brands fa-square-github fa-2x"></i></a>
-        <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ"><i class="ai ai-google-scholar-square ai-2x"></i></a>
-        <a href="https://www.researchgate.net/profile/Han-Wang-137"><i class="ai ai-researchgate-square fa-2x"></i></a>
-        <a href="https://www.linkedin.com/in/hanwgeek/"><i class="fa-brands fa-linkedin fa-2x"></i></a>
-      </p>
-    </header>
-    
-    <br>
-    <h2>About me</h2>
-    <p class="justified-text">
-    Hi, I'm a PhD student@<a href="https://fuselab.hku.hk/">FUSELab</a> at the University of Hong Kong. Previously I got my M.Sc. degree from Peking University in 2023 and my B.Eng. degree from Wuhan University in 2020. I was also a software developer intern at ESRI in 2020. Feel free to contact me!
-    </p>
-  </div>
-
-  <div class="main-content">
-    <div>
-    <h2><u>Appointment</u></h2>
-    <ul>
-      <li>
-        <b>Teaching assistant, The University of Hong Kong</b><div style="float: right;">2023.09 -- present</div><br>
-        <ul>
-          <li>
-            ARCH3097/ARCH7176 Landscape Representation 2: Systems and Simualtions/Landscape Media, 2023 Fall
-          </li>
-          <li>
-            SEED6102 Innovation and Smart Technology for Sustainable Development, 2024 Spring
-          </li>
-          <li>
-            RECO7105 Real Estate Capital Markets, 2024 Spring 
-          </li>
-        </ul>
-      </li>
-      <li>
-        <b>Student director, AAG GISS-SG</b><div style="float: right;">2023.09 -- 2024.10</div><br>
-      </li>
-      <li>
-        <b>Graduate research assistant, Peking University</b><div style="float: right;">2020.09 -- 2023.06</div><br>
-      </li>
-      <li>
-        <b>Teaching assistant, Peking University</b><div style="float: right;">2021.09 -- 2022.01</div><br>
-        <ul>
-          <li>
-            C Programming Language
-          </li>
-        </ul>
-      </li>
-      <li>
-        <b>Software developer intern, ESRI Beijing R&D center</b><div style="float: right;">2020.06 -- 2020.08</div><br>
-      </li>
-    </ul>
+  <div class="container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <h1>Han WANG</h1>
+      <!-- <p class="email"><em>hanwgeek AT connect.hku.hk</em></p> -->
+      <p class="email"><em>hanwgeek AT gmail.com</em></p>
+      <div class="social-links">
+        <a href="https://twitter.com/HanwGeek" target="_blank"><i class="fa-brands fa-square-twitter fa-2x"></i></a>
+        <a href="https://github.com/HanwGeek" target="_blank"><i class="fa-brands fa-square-github fa-2x"></i></a>
+        <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ" target="_blank"><i class="ai ai-google-scholar-square ai-2x"></i></a>
+        <a href="https://www.researchgate.net/profile/Han-Wang-137" target="_blank"><i class="ai ai-researchgate-square fa-2x"></i></a>
+        <a href="https://www.linkedin.com/in/hanwgeek/" target="_blank"><i class="fa-brands fa-linkedin fa-2x"></i></a>
+      </div>
     </div>
     
-    <div class='education'>
-    <h2><u>Education</u></h2>
+    <!-- About Section -->
+    <div class="about-section">
+      <h2>About me</h2>
+      <p class="justified-text">
+        Hi! I'm a third-year Ph.D. candidate in the <a href="https://fuselab.hku.hk/" target="_blank">FUSELab</a> at the University of Hong Kong, 
+        advised by <a href="https://fuselab.hku.hk/pi/" target="_blank">Prof. Bin Chen</a>. I earned my M.Sc. from Peking University in 2023, 
+        advised by <a href="https://pku-geocomp.com/" target="_blank">Prof. Zhou Huang</a> and Prof. Yu Liu, and my B.Eng. from Wuhan University in 2020, 
+        advised by Prof. Zhipeng Gui. I also served as the Student Director of the AAG GISS-SG from 2023 to 2024 
+        and was a software developer intern at Esri in 2020. Feel free to contact me!
+      </p>
+    </div>
+
+    <!-- Appointment Section -->
+    <!-- <div class="content-section">
+      <h2>Appointment</h2>
+      <div>
+    <ul>
+      <li>
+        <b>Student director</b><div style="float: right;">2023.09 -- 2024.10</div><br>
+        American Association of Geographers Geographic Information Science and Systems Specialty Group 
+      </li>
+      <li>
+        <b>Software developer intern</b><div style="float: right;">2020.06 -- 2020.08</div><br>
+        ESRI Beijing R&D center
+      </li>
+    </ul>
+      </div>
+    </div> -->
+    
+    <!-- Education Section -->
+    <!-- <div class="content-section education">
+      <h2>Education</h2>
+      <div>
     <ul>
       <li>
         <b>The University of Hong Kong</b><div style="float: right;">2023.09 -- present</div><br>
@@ -211,86 +340,146 @@
         Supervisor: Prof. Zhipeng Gui
       </li>
     </ul>
-    </div>
+      </div>
+    </div> -->
 
-    <div id='publication' class='publication'>
-    <h2><u>Selected Publications</u></h2>
-    <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ">Full paper list</a>
+    <!-- Publications Section -->
+    <div id='publication' class="content-section publication">
+      <h2>Selected Publications</h2>
+      <div>
+    <a href="https://scholar.google.com/citations?user=1fKt0HIAAAAJ" target="_blank">Full paper list</a>
     <br>
     *Corresponding author, #Equal contribution
     <ul>
       <h3>Renewable energy & sustainability</h3>
+        <li>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1016/j.landurbplan.2025.105521" target="_blank">High-resolution 3D solar potential assessment reveals significant shading-driven overestimation in dense urban areas</a></b>
+            <br><u>H Wang</u>, B Chen*, P Gong<br>
+            <em>Landscape and Urban Planning</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/solar-pv.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
+      </li>        
       <li>
-        <b>China's railway photovoltaic potential for sustainable urban-rural energy transition</b>
-        <br><u>H Wang</u>, B Chen*, J An, C Lin, P Gong<br>
-        <em>Environmental Research Letters</em>
-        <a style="float: right;" href="https://doi.org/10.1088/1748-9326/adff95">10.1088/1748-9326/adff95</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1088/1748-9326/adff95" target="_blank">China's railway photovoltaic potential for sustainable urban-rural energy transition</a></b>
+            <br><u>H Wang</u>, B Chen*, J An, C Lin, P Gong<br>
+            <em>Environmental Research Letters</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/railway-pv.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>        
 
       <h3>Geospatial data modeling</h3>
       <li>
-        <b>GWRBoost: A geographically weighted gradient boosting method for explainable quantification of spatially-varying relationships</b>
-        <br><u>H Wang</u>, Z Huang*, G Yin, Y Bao, X Zhou, Y Gao<br>
-        <em>arXiv preprint</em>
-        <a style="float: right;" href="https://doi.org/10.48550/arXiv.2212.05814">10.48550/arXiv.2212.05814</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.48550/arXiv.2212.05814" target="_blank">GWRBoost: A geographically weighted gradient boosting method for explainable quantification of spatially-varying relationships</a></b>
+            <br><u>H Wang</u>, Z Huang*, G Yin, Y Bao, X Zhou, Y Gao<br>
+            <em>arXiv preprint</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/gwrboost.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>
       <li>
-        <b>DouFu: A Double Fusion Joint Learning Method for Driving Trajectory Representation</b>
-        <br><u>H Wang</u>, Z Huang*, X Zhou, G Yin, Y Bao, Y Zhang<br>
-        <em>Knowledge-Based Systems</em>
-        <a style="float: right;" href="https://doi.org/10.1016/j.knosys.2022.110035">10.1016/j.knosys.2022.110035</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1016/j.knosys.2022.110035" target="_blank">DouFu: A Double Fusion Joint Learning Method for Driving Trajectory Representation</a></b>
+            <br><u>H Wang</u>, Z Huang*, X Zhou, G Yin, Y Bao, Y Zhang<br>
+            <em>Knowledge-Based Systems</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/doufu.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>
       <li>
-        <b>Quantifying spatially-varying impacts of public transport on NO2 concentrations with big geo-data</b>
-        <br><u>H Wang</u>,X Zhou, H Guo, Q Dong, Z Huang*<br>
-        <em>Environmental Monitoring and Assessment</em>
-        <a style="float: right;" href="https://doi.org/10.1007/s10661-023-11289-4">10.1007/s10661-023-11289-4</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1080/24694452.2025.2558661" target="_blank">RegionGCN: Spatial-Heterogeneity-Aware Graph Convolutional Networks</a></b>
+            <br>H Guo, <u>H Wang</u>, D Zhu, L Wu, S Fotheringham, Y Liu<br>
+            <em>Annals of the American Association of Geographers</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/regional-gcn.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
+      </li>      
+      <li>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1016/j.eng.2023.05.015" target="_blank">Big geodata revealed spatial patterns of built environment stocks across and within cities in China</a></b>
+            <br>#Z Huang*, #Y Bao, #R Mao, <u>H Wang</u>, G Yin, L Wan, H Qi, Q Li, H Tang, Q Liu, L Li, B Yu, Q Guo, Y Liu, H Guo, G Liu*<br>
+            <em>Engineering</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/building-stock.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>
       <li>
-        <b>Identifying spatiotemporal characteristics and driving factors for road traffic CO2 emissions</b>
-        <br>X Zhou, <u>H Wang</u>, Z Huang*, Y Bao, G Zhou, Y Liu<br>
-        <em>Science of The Total Environment</em>
-        <a style="float: right;" href="https://doi.org/10.1016/j.scitotenv.2022.155270">10.1016/j.scitotenv.2022.155270</a>
-      </li>   
-      <li>
-        <b>Big geodata revealed spatial patterns of built environment stocks across and within cities in China</b>
-        <br>#Z Huang*, #Y Bao, #R Mao, <u>H Wang</u>, G Yin, L Wan, H Qi, Q Li, H Tang, Q Liu, L Li, B Yu, Q Guo, Y Liu, H Guo, G Liu*<br>
-        <em>Engineering</em>
-        <a style="float: right;" href="https://doi.org/10.1016/j.eng.2023.05.015">10.1016/j.eng.2023.05.015</a>
-      </li>
-      <li>
-        <b>iTourSPOT: a context-aware framework for next POI recommendation in location-based social networks</b>
-        <br>L Wan, <u>H Wang</u>, Y Hong, R Li, W Chen, Z Huang*<br>
-        <em>International Journal of Digital Earth</em>
-        <a style="float: right;" href="https://doi.org/10.1080/17538947.2022.2122611">10.1080/17538947.2022.2122611</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1016/j.scitotenv.2022.155270" target="_blank">Identifying spatiotemporal characteristics and driving factors for road traffic CO2 emissions</a></b>
+            <br>X Zhou, <u>H Wang</u>, Z Huang*, Y Bao, G Zhou, Y Liu<br>
+            <em>Science of The Total Environment</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/road-carbon.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>
 
       <h3>Land use & Land cover</h3>
       <li>
-        <b>Enhanced mapping of essential urban land use categories in China (EULUC-China 2.0): integrating multimodal deep learning with multisource geospatial data</b>
-        <br>Z Li, B Chen*, Y Huang, <u>H Wang</u>, Y Wang, Y Yuan, X Li, JM Chen, B Xu, P Gong<br>
-        <em>Science Bulletin</em>
-        <a style="float: right;" href="https://doi.org/10.1016/j.scib.2025.07.006">10.1016/j.scib.2025.07.006</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1016/j.scib.2025.07.006" target="_blank">Enhanced mapping of essential urban land use categories in China (EULUC-China 2.0): integrating multimodal deep learning with multisource geospatial data</a></b>
+            <br>Z Li, B Chen*, Y Huang, <u>H Wang</u>, Y Wang, Y Yuan, X Li, JM Chen, B Xu, P Gong<br>
+            <em>Science Bulletin</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/euluc2.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>
       <li>
-        <b>Large-scale High-resolution Essential Urban Land Cover Category Mapping Using a Semantic-Augmented and Noise-Tolerant Approach</b>
-        <br>Z Li, <u>H Wang</u>, Y Wang, G Chen, JM Chen, B Chen*<br>
-        <em>IEEE Transactions on Geoscience and Remote Sensing</em>
-        <a style="float: right;" href="https://doi.org/10.1109/TGRS.2025.3601626">10.1109/TGRS.2025.3601626</a>
+        <div class="publication-item">
+          <div class="publication-content">
+            <b><a href="https://doi.org/10.1109/TGRS.2025.3601626" target="_blank">Large-scale High-resolution Essential Urban Land Cover Category Mapping Using a Semantic-Augmented and Noise-Tolerant Approach</a></b>
+            <br>Z Li, <u>H Wang</u>, Y Wang, G Chen, JM Chen, B Chen*<br>
+            <em>IEEE Transactions on Geoscience and Remote Sensing</em>
+          </div>
+          <div class="graphical-abstract">
+            <img src="img/santnet.jpg" alt="Graphical Abstract">
+          </div>
+        </div>
       </li>  
     </ul>
+      </div>
     </div>
 
-    <div class='presentation'>
-    <h2><u>Presentations</u></h2>
+    <!-- Presentations Section -->
+    <div class="content-section presentation">
+      <h2>Presentations</h2>
+      <div>
     <ul>
       <li>
         <b>GWRBoost: A geographically weighted gradient boosting model for explainable quantification of spatially-varying relationships</b>
         <br>
-        <a href="slides/GWRBoost_AAG_slides.pdf">[Slides]</a>
-        <a href="slides/GWRBoost_slides_CN.pdf">[Slides-CN]</a>
-        <a href="https://www.bilibili.com/video/BV1qm4y1z7qt">[Bilibili]</a>
-        <a href="https://youtu.be/itSXZuXuhnQ">[Youtube]</a>
+        <a href="slides/GWRBoost_AAG_slides.pdf" target="_blank">[Slides]</a>
+        <a href="slides/GWRBoost_slides_CN.pdf" target="_blank">[Slides-CN]</a>
+        <a href="https://www.bilibili.com/video/BV1qm4y1z7qt" target="_blank">[Bilibili]</a>
+        <a href="https://youtu.be/itSXZuXuhnQ" target="_blank">[Youtube]</a>
         <br>
         <em>in 2023 AAG Annual Meeting</em>
       </li>
@@ -298,45 +487,42 @@
       <li>
         <b>GiST Build with Pre-sorting Methods</b>
         <br>
-        <a href="slides/GiSTPreSort_FOSS4G.pdf">[Slides]</a>
-        <a href="https://www.bilibili.com/video/BV13e4y177Do/">[Bilibili]</a>
-        <a href="https://youtu.be/YYSx-1bZ6go">[Youtube]</a>
+        <a href="slides/GiSTPreSort_FOSS4G.pdf" target="_blank">[Slides]</a>
+        <a href="https://www.bilibili.com/video/BV13e4y177Do/" target="_blank">[Bilibili]</a>
+        <a href="https://youtu.be/YYSx-1bZ6go" target="_blank">[Youtube]</a>
         <br>
         <em>in FOSS4G 2021</em>
       </li>
     </ul> 
+      </div>
     </div>
 
-    <h2><u>Selected Awards</u></h2>
+    <!-- Awards Section -->
+    <div class="content-section">
+      <h2>Selected Awards</h2>
     <ul>
-      <li>Excellent Graduate of Beijing
-        <div style="float: right;">2023</div></li>
-      <li>Excellent Graduate of Peking University
-        <div style="float: right;">2023</div></li>
-      <li>Best paper award, Paper Competition of 18th China Annual Conference on Theory and Methods for GIS
-        <div style="float: right;">2023</div></li>      
-      <li>First place, AAG GISS-SG Student Honors Paper Competition
-        <div style="float: right;">2023</div></li>
-      <li>The Second Prize of Peking University Scholarship
-        <div style="float: right;">2022</div></li>
-      <li>Award for Academic Excellents
-        <div style="float: right;">2021</div></li>
-      <li>Scholarship of Excellent Student
-        <div style="float: right;">2021</div></li>        
-      <li>First Honor Graduate Student, Wuhan University
-        <div style="float: right;">2020</div></li>
-      <li>Liu Daoyu Scholarship for Creative Learning
-        <div style="float: right;">2019</div></li>
-      <li>Kwang-Hua Scholarship
-        <div style="float: right;">2018</div></li>
-      <li>First place, The 4th "NavInfo Cup" Mapping Skills & Innovation Competition
-        <div style="float: right;">2018</div></li>
-      <li>Meritorious Winner, COMAP's Mathematical Contest in Modeling
-        <div style="float: right;">2018</div></li>
+      <li>
+        <b>Beijing Municipal Outstanding Graduate</b><br>
+        Beijing Municipality
+      </li>
+      <li>
+        <b>Outstanding Graduate</b><br>
+        Peking University
+      </li>
+      <li>
+        <b>Best Paper Award</b><br>
+        18th China Annual Conference on Theory and Methods for GIS
+      </li>      
+      <li>
+        <b>First Place, Student Honors Paper Competition</b><br>
+        AAG Geographic Information Science and Systems Specialty Group
+      </li>  
+      <li>
+        <b>Outstanding Graduate</b><br>
+        Wuhan University
+      </li>
     </ul>
-
-    <!-- <h2><u>Peer Review Service</u></h2>
-    ACM SIGSPATIAL;Urban Climate;Computational Urban Science. -->
+    </div>
   </div>
 </body>
 </html>
